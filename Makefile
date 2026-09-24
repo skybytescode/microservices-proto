@@ -1,13 +1,11 @@
-PROTO_DIR := proto
 OUT_DIR := golang
+SERVICES := order payment
 
+# Local generation only; CI uses protoc.sh
 .PHONY: proto
 proto:
-	protoc -I $(PROTO_DIR) \
-		--go_out $(OUT_DIR) --go_opt paths=source_relative \
-		--go-grpc_out $(OUT_DIR) --go-grpc_opt paths=source_relative \
-		$(shell find $(PROTO_DIR) -name '*.proto')
-
-.PHONY: clean
-clean:
-	rm -rf $(OUT_DIR)
+	for s in $(SERVICES); do \
+		protoc --go_out=./$(OUT_DIR) --go_opt=paths=source_relative \
+			--go-grpc_out=./$(OUT_DIR) --go-grpc_opt=paths=source_relative \
+			./$$s/*.proto || exit 1; \
+	done
