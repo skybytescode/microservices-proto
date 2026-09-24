@@ -1,5 +1,5 @@
 OUT_DIR := golang
-SERVICES := order payment
+SERVICES := order payment shipping
 
 # Local generation only; CI uses protoc.sh
 .PHONY: proto
